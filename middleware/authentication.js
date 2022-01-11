@@ -10,9 +10,13 @@ const auth = (req, res, next) => {
     if (!token) {
         throw new BadRequestError('Token is invalid!')
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { userId: decoded.userId, name: decoded.name }
-    next();
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = { userId: decoded.userId, name: decoded.name }
+        next();
+    } catch (err) {
+        throw new BadRequestError('Token is Invalid!')
+    }
 }
 
 module.exports = auth;
