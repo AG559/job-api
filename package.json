@@ -4,10 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "author": "AG",
   "license": "ISC",
+  "engines": {
+    "node": "14.x"
+  },
   "devDependencies": {
     "nodemon": "^2.0.15"
   },

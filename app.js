@@ -9,17 +9,22 @@ const jobRoute = require('./routes/job');
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
-// extra package
+// extra security package
 const helmet = require('helmet');
 const cors = require('cors');
 const xss = require('xss-clean');
 const rate_limitter = require('express-rate-limit');
 
+// swagger package
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('swagger.yaml');
+
 const express = require('express');
 const app = express();
 
 app.use(express.json());
-// extra packages
+// Extra packages
 app.use(helmet());
 app.use(cors());
 app.use(xss());
@@ -30,6 +35,13 @@ app.use(rate_limitter({
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 }));
+
+app.get('/', (req, res) => {
+    res.send('<h1>Jobs API</h1> <a href="/api-docs">Documentation</a>')
+})
+
+// Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // routes
 app.use('/api/v1', authRoute);
